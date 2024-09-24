@@ -25,7 +25,9 @@ const EmailDetail = () => {
         }));
 
 
-        axios.patch(`http://127.0.0.1:8000/emails/${emailContext.email.email.email_id}?email_content=${event.target.value}`)
+        axios.patch(`http://${process.env.REACT_APP_API_URL}/emails/${emailContext.email.email.email_id}`, {
+            email_content: event.target.value
+        })
             .then(response => {
                 if (response.status === 200) {
                     console.log('Email content updated successfully');
@@ -41,7 +43,7 @@ const EmailDetail = () => {
     }
 
     const handleApproveAndSend = () => {
-        axios.post(`http://127.0.0.1:8000/emails/${emailContext.email.email.email_id}/accept`, {})
+        axios.post(`http://${process.env.REACT_APP_API_URL}/emails/${emailContext.email.email.email_id}/accept`, {})
             .then(response => {
                 if (response.status === 200) {
                     alert('Email approved successfully');
@@ -56,7 +58,7 @@ const EmailDetail = () => {
     }
 
     const handleReject = () => {
-        axios.post(`http://127.0.0.1:8000/emails/${emailContext.email.email.email_id}/reject`, {})
+        axios.post(`http://${process.env.REACT_APP_API_URL}/emails/${emailContext.email.email.email_id}/reject`, {})
             .then(response => {
                 if (response.status === 200) {
                     alert('Email rejected successfully');
@@ -89,7 +91,7 @@ const EmailDetail = () => {
                 />
                 <br />
                 <TextField
-                    label="Email Content"
+                    label="Email Content (Auto summarized)"
                     value={emailContext.email.email.email_content}
                     onChange={handleContentChange}
                     multiline
@@ -98,30 +100,34 @@ const EmailDetail = () => {
                 <br />
 
                 <TextField
-                    label="To Address"
+                    label="Doctor's Email Address"
                     value={emailContext.email.email.to_address}
                     onChange={handleToAddressChange}
                 />
                 <br />
                 <br />
-                {emailContext.email.email.attachments && emailContext.email.email.attachments.length > 0 && (
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => {
-                            const url = `http://127.0.0.1:8000/emails/${emailContext.email.email.email_id}/attachment`;
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.setAttribute('download', 'attachment.zip');
-                            document.body.appendChild(link);
-                            link.click();
-                        }}
-                    >
-                        Download Attachments
-                    </Button>
+                {emailContext.email.email.status === 'PENDING' && (
+                    <React.Fragment>
+                        {emailContext.email.email.attachments && emailContext.email.email.attachments.length > 0 && (
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => {
+                                    const url = `http://${process.env.REACT_APP_API_URL}/emails/${emailContext.email.email.email_id}/attachment`;
+                                    const link = document.createElement('a');
+                                    link.href = url;
+                                    link.setAttribute('download', 'attachment.zip');
+                                    document.body.appendChild(link);
+                                    link.click();
+                                }}
+                            >
+                                Download Attachments
+                            </Button>
+                        )}
+                        <Button variant="contained" onClick={handleApproveAndSend}>Approve and Send</Button>
+                        <Button variant="outlined" color="error" onClick={handleReject}>Reject</Button>
+                    </React.Fragment>
                 )}
-                <Button variant="contained" onClick={handleApproveAndSend}>Approve and Send</Button>
-                <Button variant="outlined" color="error" onClick={handleReject}>Reject</Button>
             </Box>
 
         ) : (

@@ -15,19 +15,19 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
 
 
-const EmailList = () => {
+const EmailList = (props) => {
     const [emails, setEmails] = useState([]);
     const [selectedEmail, setSelectedEmail] = useState([]);
 
     const emailContext = useContext(EmailContext);
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/emails')
+        axios.get(`http://${process.env.REACT_APP_API_URL}/emails`)
             .then(response => setEmails(response.data))
             .catch(error => console.error('Error fetching emails:', error));
 
         const handleCustomEvent = (event) => {
-            axios.get('http://127.0.0.1:8000/emails')
+            axios.get(`http://${process.env.REACT_APP_API_URL}/emails`)
             .then(response => setEmails(response.data))
             .catch(error => console.error('Error fetching emails:', error));
         };
@@ -48,7 +48,7 @@ const EmailList = () => {
     };
 
     const handleUpdate = () => {
-        axios.patch(`http://127.0.0.1:8000/emails/${selectedEmail.email_id}`, selectedEmail)
+        axios.patch(`http://${process.env.REACT_APP_API_URL}/emails/${selectedEmail.email_id}`, selectedEmail)
             .then(response => {
                 if (response.status === 200) {
                     alert('Email updated successfully');
@@ -59,7 +59,7 @@ const EmailList = () => {
     };
 
     const handleApprove = (emailId) => {
-        axios.post(`http://127.0.0.1:8000/emails/${emailId}/accept`)
+        axios.post(`http://${process.env.REACT_APP_API_URL}/emails/${emailId}/accept`)
             .then(response => {
                 if (response.status === 200) {
                     alert('Email approved successfully');
@@ -70,7 +70,7 @@ const EmailList = () => {
     };
 
     const refreshEmails = () => {
-        axios.get('http://127.0.0.1:8000/emails')
+        axios.get(`http://${process.env.REACT_APP_API_URL}/emails`)
             .then(response => setEmails(response.data))
             .catch(error => console.error('Error fetching emails:', error));
     };
@@ -79,7 +79,7 @@ const EmailList = () => {
         <List
             component="nav"
             aria-labelledby="nested-list-subheader">
-            {emails.filter(email => email.status === 'PENDING').map(email => (
+            {emails.filter(email => email.status === props.status).map(email => (
                 <ListItemButton onClick={() => handleEmailClick(email)} key={email.email_id}>  
                     <ListItemIcon>
                         <InboxIcon />
@@ -92,3 +92,4 @@ const EmailList = () => {
 };
 
 export default EmailList;
+

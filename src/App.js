@@ -87,17 +87,11 @@ function App() {
                             </Typography><br/>
                             <EmailList status="APPROVED"/>
                         </Grid>
-                        <Grid size={6}>
+                        <Grid size={9}>
                             <Typography variant="h5" component="h2">
                                 Email detail
                             </Typography><br/>
                             <EmailDetail/>
-                        </Grid>
-                        <Grid size={3}>
-                            <Typography variant="h5" component="h2">
-                                Email Preview
-                            </Typography> <br/>
-                            <EmailBody/>
                         </Grid>
                     </Grid>
                 </CustomTabPanel>

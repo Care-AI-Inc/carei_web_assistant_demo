@@ -268,6 +268,7 @@ const EmailDetail = () => {
                                         editor={ClassicEditor}
                                         config={editorConfig}
                                         onChange={handleContentChange}
+                                        data={emailContext.email.email ? emailContext.email.email.email_content : ''}
                                     />}</div>
                             </div>
                         </div>

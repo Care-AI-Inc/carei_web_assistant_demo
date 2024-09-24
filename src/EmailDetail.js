@@ -185,23 +185,14 @@ const EmailDetail = () => {
     }
 
     const handleContentChange = (event, editor) => {
-        emailContext.setEmailState(({
-            "email": {
-                ...emailContext.email.email, // Copy existing state
-                "email_content": editor.getData() // Update specific key
-            }
-        }));
+        // emailContext.setEmailState(({
+        //     "email": {
+        //         ...emailContext.email.email, // Copy existing state
+        //         "email_content": editor.getData() // Update specific key
+        //     }
+        // }));
 
-
-        axios.patch(`http://${process.env.REACT_APP_API_URL}/emails/${emailContext.email.email.email_id}`, {
-            email_content: editor.getData()
-        })
-            .then(response => {
-                if (response.status === 200) {
-                    console.log('Email content updated successfully');
-                }
-            })
-            .catch(error => console.error('Error updating email content:', error));
+        // var editorData = editor.getData()
 
         //setEmailContent(event.target.value);
     }
@@ -211,17 +202,28 @@ const EmailDetail = () => {
     }
 
     const handleApproveAndSend = () => {
-        axios.post(`http://${process.env.REACT_APP_API_URL}/emails/${emailContext.email.email.email_id}/accept`, {})
+        var currData = editorRef.current.getData();
+        axios.patch(`http://${process.env.REACT_APP_API_URL}/emails/${emailContext.email.email.email_id}`, {
+            email_content: editorRef.current.getData()
+        })
             .then(response => {
                 if (response.status === 200) {
-                    alert('Email approved successfully');
-                    emailContext.setEmailState({});
+                    console.log('Email content updated successfully');
+                    axios.post(`http://${process.env.REACT_APP_API_URL}/emails/${emailContext.email.email.email_id}/accept`, {})
+                        .then(response => {
+                            if (response.status === 200) {
+                                alert('Email approved successfully');
+                                emailContext.setEmailState({});
 
-                    const myEvent = new CustomEvent('fetchEmails', {});
-                    document.dispatchEvent(myEvent);
+                                const myEvent = new CustomEvent('fetchEmails', {});
+                                document.dispatchEvent(myEvent);
+                            }
+                        })
+                        .catch(error => console.error('Error approving email:', error));
                 }
             })
-            .catch(error => console.error('Error approving email:', error));
+            .catch(error => console.error('Error updating email content:', error));
+
 
     }
 
@@ -265,8 +267,11 @@ const EmailDetail = () => {
                                 <Typography variant="body1"
                                             style={{fontSize: '16px', color: 'grey', fontFamily: 'Roboto'}}>Auto
                                     generated summary email</Typography>
-                                <div ref={editorRef}>{isLayoutReady &&
+                                <div>{isLayoutReady &&
                                     <CKEditor
+                                        onReady={editor => {
+                                            editorRef.current = editor; // Store the editor instance
+                                        }}
                                         editor={ClassicEditor}
                                         config={editorConfig}
                                         onChange={handleContentChange}

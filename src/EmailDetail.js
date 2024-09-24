@@ -184,7 +184,7 @@ const EmailDetail = () => {
         // setEmailSubject(event.target.value);
     }
 
-    const handleContentChange =(event, editor) => {
+    const handleContentChange = (event, editor) => {
         emailContext.setEmailState(({
             "email": {
                 ...emailContext.email.email, // Copy existing state
@@ -248,7 +248,7 @@ const EmailDetail = () => {
                 autoComplete="off">
                 <TextField
                     label="Email ID"
-                    value={emailContext.email.email.email_id}
+                    value={emailContext.email.email ? emailContext.email.email.email_id : ''}
                     disabled
                 />
                 <br/>
@@ -262,7 +262,9 @@ const EmailDetail = () => {
                     <div className="main-container">
                         <div className="editor-container editor-container_classic-editor" ref={editorContainerRef}>
                             <div className="editor-container__editor">
-                                <Typography variant="body1" style={{fontSize: '16px', color: 'grey', fontFamily: 'Roboto'}}>Auto generated summary email</Typography>
+                                <Typography variant="body1"
+                                            style={{fontSize: '16px', color: 'grey', fontFamily: 'Roboto'}}>Auto
+                                    generated summary email</Typography>
                                 <div ref={editorRef}>{isLayoutReady &&
                                     <CKEditor
                                         editor={ClassicEditor}
@@ -320,11 +322,11 @@ const EmailDetail = () => {
                                 <Typography gutterBottom>
                                     From: {emailContext.email.email.original_email_from_address}
                                 </Typography>
-                                 <Typography gutterBottom>
+                                <Typography gutterBottom>
                                     Subject: {emailContext.email.email.original_email_subject}
                                 </Typography>
                                 Body:
-                                <div dangerouslySetInnerHTML={{__html: emailContext.email.email.original_email_text}} />
+                                <div dangerouslySetInnerHTML={{__html: emailContext.email.email.original_email_text}}/>
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={() => {

@@ -81,11 +81,19 @@ function App() {
                             <Typography variant="h5" component="h2">
                                 List of pending reports email
                             </Typography><br/>
-                            <EmailList status="PENDING"/>
+                            <Box
+                                sx={{
+                                    overflow: 'auto',
+                                    height: 'calc(100vh - 250px)'
+                                }}
+                            >
+                                <EmailList status="PENDING"/>
+
                             <Typography variant="h5" component="h2">
                                 List of processed reports email
                             </Typography><br/>
-                            <EmailList status="APPROVED"/>
+                                <EmailList status="APPROVED"/>
+                            </Box>
                         </Grid>
                         <Grid size={9}>
                             <Typography variant="h5" component="h2">

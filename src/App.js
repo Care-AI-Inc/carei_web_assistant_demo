@@ -64,8 +64,8 @@ function App() {
                 </Box>
                 <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Reports Email" {...a11yProps(0)} />
-                        <Tab label="Stats" {...a11yProps(1)} />
+                        <Tab label="Document Emails" {...a11yProps(0)} />
+                        <Tab label="Analytics" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
@@ -79,7 +79,7 @@ function App() {
                     <Grid container spacing={2}>
                         <Grid size={3}>
                             <Typography variant="h5" component="h2">
-                                List of pending reports email
+                                Processed Emails Pending
                             </Typography><br/>
                             <Box
                                 sx={{
@@ -90,14 +90,14 @@ function App() {
                                 <EmailList status="PENDING"/>
 
                             <Typography variant="h5" component="h2">
-                                List of processed reports email
+                                Resolved emails
                             </Typography><br/>
                                 <EmailList status="APPROVED"/>
                             </Box>
                         </Grid>
                         <Grid size={9}>
                             <Typography variant="h5" component="h2">
-                                Email detail
+                                Email Composer
                             </Typography><br/>
                             <EmailDetail/>
                         </Grid>
